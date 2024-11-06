@@ -1,0 +1,410 @@
+﻿@model ClientViewModel
+
+@{
+    ViewData["Title"] = "Create Client";
+}
+
+    <form asp-controller="Clients">
+        <div class="row">
+            <div class="mb-3 col-md-3 ms-auto d-flex justify-content-end">
+                <a class="btn btn-secondary text-white me-2" asp-controller="Clients" asp-action="Index">
+                    خروج
+                </a>
+                <button id="btnCreate" onclick="toggleButtons()" class="btn btn-success text-white px-4">
+                    حفظ
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    رقم المندوب / العميل / المورد
+                    <span style="color: red;">*</span>
+                </label>
+                <input type="text" readonly class="form-control" asp-for="@Model.Id">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    مميز
+                    <span style="color: red;">*</span>
+                </label>
+                <div class="d-flex align-items-center justify-content-between">
+                    @foreach (var type in Model.ClientTypes)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="ClientTypeId" value="@type.Value">
+                            <label class="form-check-label">
+                                @type.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    التطبيق
+                    <span style="color: red;">*</span>
+                </label>
+                <select class="form-select" asp-for="ApplicationId" asp-items="@Model.Applications">
+                    <option value="">اختر التطبيق</option>
+                </select>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    رقم السجل / الهوية / الإقامة
+                    <span style="color: red;">*</span>
+                </label>
+                <input type="text" class="form-control" asp-for="NationalIdentity">
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="mb-3 col-md-3 form-check">
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="IsEmployee">
+                    <label class="form-check-label">
+                        الموظفين
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3 form-check">
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="IsOperatingClient">
+                    <label class="form-check-label">
+                        عميل تشغيل
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3 form-check">
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="NoCommissionOnFriday">
+                    <label class="form-check-label">
+                        لا عمولة يوم الجمعة
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3 form-check">
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="BusinessDayCommissionOnly">
+                    <label class="form-check-label">
+                        تحسب عمولة يوم العمل فقط
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    الاسم عربي
+                    <span style="color: red;">*</span>
+                </label>
+                <input type="text" class="form-control" asp-for="NameAr">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    الاسم انجليزي
+                    <span style="color: red;">*</span>
+                </label>
+                <input type="text" class="form-control" asp-for="NameEn">
+            </div>                  
+            <div class="mb-3 col-md-3">
+                <label class="form-label">الرقم الضريبي للعميل</label>
+            <input type="text" class="form-control" asp-for="CustomerTaxNumber">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">المشرف</label>
+            <select class="form-select" asp-for="ModeratorId" asp-items="@Model.Moderators">
+                <option value="">اختر المشرف</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                العنوان عربي
+                </label>
+                <input type="text" class="form-control" asp-for="AddressAr">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                العنوان لاتيني
+                </label>
+                <input type="text" class="form-control" asp-for="AddressEn">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">Password app</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control" asp-for="PasswordApp">
+                    <a class="btn btn-outline-info ms-1">Update</a>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">IMEI</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="number" class="form-control" asp-for="IMEI">
+                    <a class="btn btn-outline-info ms-1">Update</a>
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                رقم جوال StcPay
+                </label>
+                <input type="text" class="form-control" asp-for="PhoneNumberStcPay">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                رقم السيارة
+                </label>
+                <input type="text" class="form-control" asp-for="CarNumber">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">ايجار سيارة</label>
+                <input type="text" value="0" class="form-control text-center" asp-for="CarRental">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">تاريخ استلام سيارة</label>
+                <input type="date" class="form-control" asp-for="DateOfReceiptCar">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                رقم الجوال
+                </label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control" asp-for="PhoneNumber">
+                    <a class="btn btn-outline-info ms-1">Update</a>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                الرمز البريدي
+                </label>
+                <input type="text" class="form-control" asp-for="zipCode">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">صندوق بريد</label>
+                <input type="text" class="form-control" asp-for="Mailbox">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">رقم الفاكس</label>
+                <input type="number" class="form-control" asp-for="FaxNumber">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                Iqama Expire
+                </label>
+                <input type="date" class="form-control" asp-for="IqamaExpirationDate">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                License Expire
+                </label>
+                <input type="date" class="form-control" asp-for="LicenseExpirationDate">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">البريد الالكتروني</label>
+                <input type="text" class="form-control" asp-for="Email">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                العمولة 
+                </label>
+                <input type="number" class="form-control" asp-for="Commission">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                </label>
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="IsMonthlyCommission">
+                    <label class="form-check-label">
+                    عمولة شهرية
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3">
+              <div class="mb-3 col-md-3">
+                <label class="form-label">
+                    القيمة / النسبة
+                    <span style="color: red;">*</span>
+                </label>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="form-check me-2">
+                        <input class="form-check-input" type="radio" asp-for="CommissionByValueOrPercentage" value="القيمة">
+                        <label class="form-check-label">
+                        الفيمة
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="CommissionByValueOrPercentage" value="النسبة">
+                        <label class="form-check-label">
+                        النسبة
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">عمولة بعد الطلب رقم</label>
+                <input type="text" class="form-control" asp-for="CommissionAfterOrderNumber">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">عمولة الطلبات</label>
+                <input type="number" class="form-control" asp-for="OrderCommission">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                </label>
+                <div class="d-flex align-items-center justify-content-center">
+                <input class="form-check-input me-2" type="checkbox" asp-for="AllOrders">
+                    <label class="form-check-label">
+                    جميع الطلبات
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                الرصيد الافتتاحي
+                </label>
+                <input type="text" class="form-control" asp-for="OpeningBalance">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">الحد الائتماني</label>
+                <input type="text" class="form-control" asp-for="Creditlimit">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">الجنسية</label>
+                <select class="form-select" asp-for="NationalityId" asp-items="@Model.Nationalities">
+                    <option value="">اختر الجنسية</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                تاريخ بداية العمل
+                </label>
+                <input type="date" class="form-control" asp-for="StartWorkDate">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                يوم التصفية - المحاسبة
+                </label>
+                <select class="form-select" asp-for="AccountingDayId" asp-items="@Model.AccountingDays">
+                    <option value="">اختر يوم التصفية</option>
+                </select>
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">العملة</label>
+                <select class="form-select" asp-for="CurrencyId" asp-items="@Model.Currencies">
+                    <option value="">اختر العملة</option>
+                </select>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">المنطقة الرئيسية</label>
+                <select class="form-select" asp-for="AreaId" asp-items="@Model.Areas">
+                    <option value="">اختر المنطقة</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                الفرع
+                </label>
+                <select class="form-select" asp-for="BranchId" asp-items="@Model.Branchs">
+                    <option value="">اختر الفرع</option>
+                </select>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                Region Id
+                </label>
+                <input type="text" class="form-control" asp-for="RegionId">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">Shift Id</label>
+                <input type="text" class="form-control" asp-for="ShiftId">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">رمز البنك</label>
+                <input type="number" class="form-control" asp-for="BankCode">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                الآيبان
+                </label>
+                <input type="text" class="form-control" asp-for="IBAN">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                رقم الحساب
+                </label>
+                <input type="text" class="form-control" asp-for="AccountNumber">
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label class="form-label">مركز التكلفة</label>
+                <input type="text" class="form-control" asp-for="CostCenter">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                </label>
+                <div class="d-flex align-items-center justify-content-center">
+                    <input class="form-check-input me-2" type="checkbox" asp-for="IsStop">
+                    <label class="form-check-label">
+                         إيقاف
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                تاريخ التوقف
+                </label>
+                <input type="date" class="form-control" asp-for="StopDate">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">
+                سبب التوقف
+                </label>
+                <input type="text" class="form-control" asp-for="StopReason">
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts
+{
+@*     <script>
+        function toggleButtons() {
+            document.getElementById("btnCreate").classList.add("d-none");
+            document.getElementById("btnAction").classList.remove("d-none");
+        }
+    </script> *@
+}
